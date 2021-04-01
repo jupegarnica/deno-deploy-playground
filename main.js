@@ -1,7 +1,7 @@
 addEventListener('fetch', async (event) => {
   const method = event.request.method;
   const { pathname } = new URL(event.request.url);
-  console.log( method, pathname);
+  console.log(method, pathname);
 
   if (pathname.startsWith('/counter')) {
     let data = Number(await Deno.readTextFile('counter'));
@@ -13,15 +13,29 @@ addEventListener('fetch', async (event) => {
     });
     return event.respondWith(response);
   }
-  if (pathname.startsWith('/inspect')) {
-    const data = {
-      cwd: Deno.cwd(),
-      metrics: Deno.metrics()
-
-    }
-    const response = new Response(JSON.stringify(data, null, 2), {
-      headers: { 'content-type': 'application/json;charset=UTF-8' },
-    });
+  // if (pathname.startsWith('/inspect')) {
+  //   const data = {
+  //     cwd: Deno.cwd(),
+  //     metrics: Deno.metrics(),
+  //   };
+  //   const response = new Response(
+  //     JSON.stringify(data, null, 2),
+  //     {
+  //       headers: {
+  //         'content-type': 'application/json;charset=UTF-8',
+  //       },
+  //     },
+  //   );
+  //   return event.respondWith(response);
+  // }
+  if (pathname.startsWith('/ip')) {
+    const ip = event.request.headers.get('x-forwarded-for');
+    const response = new Response(
+      `Your IP address is <b>${ip}</b>`,
+      {
+        headers: { 'content-type': 'text/html' },
+      },
+    );
     return event.respondWith(response);
   }
 
@@ -32,5 +46,4 @@ addEventListener('fetch', async (event) => {
     },
   });
   return event.respondWith(response404);
-
 });
