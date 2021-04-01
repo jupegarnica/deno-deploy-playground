@@ -1,0 +1,1 @@
+deployctl run --watch ./main.js
