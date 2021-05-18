@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Screen</title>
+  </head>
+  <style>
+    :root {
+      /* --background-text: url(https://picsum.photos/id/870/200/300?grayscale&blur=2); */
+      /* --background-text: url(https://picsum.photos/200/300?blur=2); */
+      /* --background-text: -webkit-linear-gradient(pink, red); */
+
+      --background-text: linear-gradient(
+        135deg,
+        rgb(77, 47, 126) 30%,
+        #51327577 100%
+      );
+      --background: linear-gradient(
+        135deg,
+        #fff 30%,
+        #51327577 100%
+      );
+    }
+    body {
+      margin: 0;
+    }
+    main {
+      background: var(--background);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1em;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      color: white;
+      font-weight: 800;
+      font-size: 10vmin;
+      font-size: clamp(20px, 10vmin, 150px);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+        'Helvetica Neue', sans-serif;
+    }
+
+    .size {
+      position: relative;
+      z-index: 2;
+    }
+    .slot,
+    .slot span,
+    .size {
+      background-image: var(--background-text);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .fullscreen {
+      cursor: zoom-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1em;
+      font-size: 0.3em;
+      font-size: clamp(15px, 0.25em, 100px);
+      opacity: 0.6;
+    }
+    .fullscreen > * {
+      margin: 0.4em;
+    }
+    * {
+      border: 0;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    .toggle,
+    .toggle:before,
+    .slot__label,
+    .curtain {
+      transition-property: background-color, transform,
+        visibility;
+      transition-duration: 0.25s;
+      transition-timing-function: ease-in,
+        cubic-bezier(0.6, 0.2, 0.4, 1.5), linear;
+    }
+    .toggle:before,
+    .slot,
+    .slot__label {
+      display: block;
+    }
+    .toggle:before,
+    .curtain {
+      position: absolute;
+    }
+    .toggle:checked,
+    .curtain {
+      background-color: white;
+      background-image: var(--background-text);
+    }
+    .toggle:focus {
+      outline: transparent;
+    }
+    .toggle {
+      border-radius: 0.75em;
+      box-shadow: 0 0 0 0.1em inset;
+      cursor: pointer;
+      position: relative;
+      margin-right: 0.25em;
+      width: 3em;
+      height: 1.5em;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      font-size: 0.7em;
+    }
+    .toggle:before {
+      background: currentColor;
+      border-radius: 50%;
+      content: '';
+      top: 0.2em;
+      left: 0.2em;
+      width: 1.1em;
+      height: 1.1em;
+    }
+    .toggle:checked:before {
+      transform: translateX(1.5em);
+    }
+    .toggle:checked ~ .slot .slot__label,
+    .slot__label:nth-child(2) {
+      transform: translateY(-50%) scaleY(0);
+    }
+    .toggle:checked ~ .slot .slot__label:nth-child(2) {
+      transform: translateY(-100%) scaleY(1);
+    }
+    .toggle:checked ~ .curtain {
+      transform: scaleX(1);
+    }
+    .slot {
+      /* font-size: 1.5em; */
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      line-height: 1;
+      /* overflow: hidden; */
+      height: 1em;
+      /* text-indent: -0.9em; */
+      /* -webkit-text-stroke: 0.05em #fff; */
+    }
+    .slot__label {
+      transform-origin: 50% 0;
+    }
+    .slot__label:nth-child(2) {
+      transform-origin: 50% 100%;
+    }
+    .curtain {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      z-index: -1;
+    }
+  </style>
+
+  <body>
+    <main>
+      <div></div>
+      <div class="size">
+        <span class="width">100</span>
+        <span class=""> x </span>
+        <span class="height">100</span>
+      </div>
+      <div class="fullscreen" onclick="fullscreen()">
+        <input
+          id="toggle"
+          class="toggle"
+          type="checkbox"
+          role="switch"
+          name="toggle"
+          value="on"
+        />
+        <label for="toggle" class="slot">
+          Fullscreen
+          <span class="slot__label">OFF</span>
+          <span class="slot__label">ON</span>
+        </label>
+      </div>
+      <div class="curtain"></div>
+    </main>
+  </body>
+  <script>
+    const mainNode = document.querySelector('body');
+
+    function fullscreen() {
+      if (!document.fullscreenElement) {
+        mainNode.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+    const widthNode = document.querySelector('.width');
+    const heightNode = document.querySelector('.height');
+    window.addEventListener('resize', () => {
+      widthNode.innerText = document.body.clientWidth;
+      heightNode.innerText = document.body.clientHeight;
+    });
+    widthNode.innerText = document.body.clientWidth;
+    heightNode.innerText = document.body.clientHeight;
+  </script>
+</html>
