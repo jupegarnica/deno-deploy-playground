@@ -1,7 +1,7 @@
 import {
   serve,
   serveStatic,
-} from 'https://deno.land/x/sift@0.3.0/mod.ts';
+} from 'https://deno.land/x/sift@0.3.1/mod.ts';
 import { myIp } from './myIp.jsx';
 serve({
   '/': () =>
