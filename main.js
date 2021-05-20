@@ -13,6 +13,11 @@ serve({
     }),
   '/ip': myIp,
   '/screen': serveStatic('screen.html', {
+    cache: false,
+    baseUrl: import.meta.url,
+  }),
+  '/:filename+': serveStatic('.', {
+    cache: false,
     baseUrl: import.meta.url,
   }),
 
